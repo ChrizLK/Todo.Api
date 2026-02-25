@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Todo.Api.Data;
+using Todo.Api.Middleware;
 using Todo.Api.Services;
 using Todo.Api.Services.Interfaces;
 
@@ -25,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.UseHttpsRedirection();
 
