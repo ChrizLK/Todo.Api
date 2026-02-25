@@ -26,7 +26,7 @@ namespace Todo.Api.Services
 
         #region Get
 
-        public async Task<Pagination<TodoReadDto>> GetAllAsync(int pageNumber)
+        public async Task<Pagination<TodoReadDto>> GetAllAsync(int pageNumber,CancellationToken cancellationToken)
         {
             var query = _context.Todos.AsNoTracking();
 
@@ -44,7 +44,7 @@ namespace Todo.Api.Services
                     IsCompleted = x.IsCompleted,
                     CreatedAt = x.CreatedAt
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return new Pagination<TodoReadDto>
             {
@@ -55,7 +55,7 @@ namespace Todo.Api.Services
             };
         }
 
-        public async Task<TodoReadDto?> GetByIdAsync(int id)
+        public async Task<TodoReadDto?> GetByIdAsync(int id,CancellationToken cancellationToken)
         {
             return await _context.Todos
                 .Where(x => x.id == id)
@@ -67,12 +67,12 @@ namespace Todo.Api.Services
                     IsCompleted = x.IsCompleted,
                     CreatedAt = x.CreatedAt
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         #endregion
 
-        public async Task<TodoReadDto> CreateAsync(TodoCreateDto dto)
+        public async Task<TodoReadDto> CreateAsync(TodoCreateDto dto,CancellationToken cancellationToken)
         {
             var entity = new Models.TodoItem
             {
@@ -80,8 +80,8 @@ namespace Todo.Api.Services
                 Description = dto.Description
             };
 
-            _context.Todos.Add(entity);
-            await _context.SaveChangesAsync();
+            await  _context.Todos.AddAsync(entity,cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             return new TodoReadDto
             {
@@ -93,26 +93,26 @@ namespace Todo.Api.Services
             };
         }
 
-        public async Task<bool> UpdateAsync(int id, TodoUpdateDto dto)
+        public async Task<bool> UpdateAsync(int id, TodoUpdateDto dto,CancellationToken cancellationToken)
         {
-            var entity = await _context.Todos.FindAsync(id);
+            var entity = await _context.Todos.FindAsync(id,cancellationToken);
             if (entity == null) return false;
 
             entity.Title = dto.Title;
             entity.Description = dto.Description;
             entity.IsCompleted = dto.IsCompleted;
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id,CancellationToken cancellationToken)
         {
-            var entity = await _context.Todos.FindAsync(id);
+            var entity = await _context.Todos.FindAsync(id,cancellationToken);
             if (entity == null) return false;
 
             _context.Todos.Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
 

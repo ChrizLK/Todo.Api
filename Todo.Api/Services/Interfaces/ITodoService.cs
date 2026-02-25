@@ -5,10 +5,10 @@ namespace Todo.Api.Services.Interfaces
 {
     public interface ITodoService
     {
-        Task<Pagination<TodoReadDto>> GetAllAsync(int pageNumber);
-        Task<TodoReadDto?> GetByIdAsync(int id);
-        Task<TodoReadDto> CreateAsync(TodoCreateDto dto);
-        Task<bool> UpdateAsync(int id, TodoUpdateDto dto);
-        Task<bool> DeleteAsync(int id);
+        Task<Pagination<TodoReadDto>> GetAllAsync(int pageNumber , CancellationToken cancellationToken);
+        Task<TodoReadDto?> GetByIdAsync(int id, CancellationToken cancellationToken);
+        Task<TodoReadDto> CreateAsync(TodoCreateDto dto, CancellationToken cancellationToken);
+        Task<bool> UpdateAsync(int id, TodoUpdateDto dto, CancellationToken cancellationToken);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
     }
 }

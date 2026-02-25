@@ -26,17 +26,17 @@ namespace Todo.Api.Controllers
         #region Get Endpoints
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int pageNumber = 1)
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken ,int pageNumber = 1)
         {
-            var result = await _service.GetAllAsync(pageNumber);
+            var result = await _service.GetAllAsync(pageNumber,cancellationToken);
             return Ok(result);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id,CancellationToken cancellationToken)
         {
-            var item = await _service.GetByIdAsync(id);
+            var item = await _service.GetByIdAsync(id,cancellationToken);
 
             if (item == null)
             { 
@@ -49,27 +49,27 @@ namespace Todo.Api.Controllers
         #endregion
 
         [HttpPost]
-        public async Task<IActionResult> Create(TodoCreateDto dto)
+        public async Task<IActionResult> Create(TodoCreateDto dto,CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var created = await _service.CreateAsync(dto);
+            var created = await _service.CreateAsync(dto,cancellationToken);
 
             return Created();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, TodoUpdateDto dto)
+        public async Task<IActionResult> Update(int id, TodoUpdateDto dto,CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState); 
             }
 
-            var updated = await _service.UpdateAsync(id, dto);
+            var updated = await _service.UpdateAsync(id, dto,cancellationToken);
 
             if (!updated)
             {
@@ -81,9 +81,9 @@ namespace Todo.Api.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id,CancellationToken cancellationToken)
         {
-            var deleted = await _service.DeleteAsync(id);
+            var deleted = await _service.DeleteAsync(id,cancellationToken);
 
             if (!deleted)
             {
