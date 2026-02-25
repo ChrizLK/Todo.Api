@@ -5,14 +5,20 @@ namespace Todo.Api.Middleware
 {
     public class GlobalExceptionHandler
     {
-
+        #region Private Variables
         private readonly RequestDelegate _requestDelegate;
 
+        #endregion
+
+        #region Constructor
         public GlobalExceptionHandler(RequestDelegate requestDelegate)
         {
             _requestDelegate = requestDelegate;
         }
 
+        #endregion
+
+        #region Methods
         public async Task InvokeAsync(HttpContext context)
         {
             try
@@ -35,5 +41,7 @@ namespace Todo.Api.Middleware
                 await context.Response.WriteAsync(result);
             }
         }
+
+        #endregion
     }
 }
